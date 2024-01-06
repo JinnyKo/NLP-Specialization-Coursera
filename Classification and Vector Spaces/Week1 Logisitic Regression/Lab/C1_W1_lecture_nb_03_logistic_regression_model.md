@@ -1,283 +1,169 @@
-# Building and Visualizing word frequencies
+# Visualizing tweets and the Logistic Regression model
 
+**Objectives:** Visualize and interpret the logistic regression model
 
-In this lab, we will focus on the `build_freqs()` helper function and visualizing a dataset fed into it. In our goal of tweet sentiment analysis, this function will build a dictionary where we can lookup how many times a word appears in the lists of positive or negative tweets. This will be very helpful when extracting the features of the dataset in the week's programming assignment. Let's see how this function is implemented under the hood in this notebook.
+**Steps:**
+* Plot tweets in a scatter plot using their positive and negative sums.
+* Plot the output of the logistic regression model in the same plot as a solid line
 
-## Setup
+## Import the required libraries
 
-Let's import the required libraries for this lab: 
+We will be using [*NLTK*](http://www.nltk.org/howto/twitter.html), an opensource NLP library, for collecting, handling, and processing Twitter data. In this lab, we will use the example dataset that comes alongside with NLTK. This dataset has been manually annotated and serves to establish baselines for models quickly. 
+
+So, to start, let's import the required libraries. 
 
 
 ```python
-import nltk                                  # Python library for NLP
-from nltk.corpus import twitter_samples      # sample Twitter dataset from NLTK
-import matplotlib.pyplot as plt              # visualization library
-import numpy as np                           # library for scientific computing and matrix operations
+import nltk                         # NLP toolbox
+from os import getcwd
+import pandas as pd                 # Library for Dataframes 
+from nltk.corpus import twitter_samples 
+import matplotlib.pyplot as plt     # Library for visualization
+import numpy as np                  # Library for math functions
+
+from utils import process_tweet, build_freqs # Our functions for NLP
 
 nltk.download('twitter_samples')
 ```
 
-#### Import some helper functions that we provided in the utils.py file:
-* `process_tweet()`: Cleans the text, tokenizes it into separate words, removes stopwords, and converts words to stems.
-* `build_freqs()`: This counts how often a word in the 'corpus' (the entire set of tweets) was associated with a positive label `1` or a negative label `0`. It then builds the `freqs` dictionary, where each key is a `(word,label)` tuple, and the value is the count of its frequency within the corpus of tweets.
-
-
-```python
-# download the stopwords for the process_tweet function
-nltk.download('stopwords')
-
-# import our convenience functions
-from utils import process_tweet, build_freqs
-```
-
 ## Load the NLTK sample dataset
 
-As in the previous lab, we will be using the [Twitter dataset from NLTK](http://www.nltk.org/howto/twitter.html#Using-a-Tweet-Corpus).
+To complete this lab, you need the sample dataset of the previous lab. Here, we assume the files are already available, and we only need to load into Python lists.
 
 
 ```python
-# select the lists of positive and negative tweets
+# select the set of positive and negative tweets
 all_positive_tweets = twitter_samples.strings('positive_tweets.json')
 all_negative_tweets = twitter_samples.strings('negative_tweets.json')
 
-# concatenate the lists, 1st part is the positive tweets followed by the negative
-tweets = all_positive_tweets + all_negative_tweets
+tweets = all_positive_tweets + all_negative_tweets ## Concatenate the lists. 
+labels = np.append(np.ones((len(all_positive_tweets),1)), np.zeros((len(all_negative_tweets),1)), axis = 0)
 
-# let's see how many tweets we have
-print("Number of tweets: ", len(tweets))
+# split the data into two pieces, one for training and one for testing (validation set) 
+train_pos  = all_positive_tweets[:4000]
+train_neg  = all_negative_tweets[:4000]
+
+train_x = train_pos + train_neg 
+
+print("Number of tweets: ", len(train_x))
 ```
 
-Next, we will build an array of labels that matches the sentiments of our tweets.  This data type works pretty much like a regular list but is optimized for computations and manipulation. The `labels` array will be composed of 10000 elements. The first 5000 will be filled with `1` labels denoting positive sentiments, and the next 5000 will be `0` labels denoting the opposite. We can do this easily with a series of operations provided by the `numpy` library:
+# Load the extracted features
 
-* `np.ones()` - create an array of 1's
-* `np.zeros()` - create an array of 0's
-* `np.append()` - concatenate arrays
+Part of this week's assignment is the creation of the numerical features needed for the Logistic regression model. In order not to interfere with it, we have previously calculated and stored these features in a CSV file for the entire training set.
+
+So, please load these features created for the tweets sample. 
 
 
 ```python
-# make a numpy array representing labels of the tweets
-labels = np.append(np.ones((len(all_positive_tweets))), np.zeros((len(all_negative_tweets))))
+data = pd.read_csv('./data/logistic_features.csv'); # Load a 3 columns csv file using pandas function
+data.head(10) # Print the first 10 data entries
 ```
 
-## Dictionaries
-
-In Python, a dictionary is a mutable and indexed collection. It stores items as key-value pairs and uses [hash tables](https://en.wikipedia.org/wiki/Hash_table) underneath to allow practically constant time lookups. In NLP, dictionaries are essential because it enables fast retrieval of items or containment checks even with thousands of entries in the collection.
-
-### Definition
-
-A dictionary in Python is declared using curly brackets. Look at the next example:
+Now let us get rid of the data frame to keep only Numpy arrays.
 
 
 ```python
-dictionary = {'key1': 1, 'key2': 2}
+# Each feature is labeled as bias, positive and negative
+X = data[['bias', 'positive', 'negative']].values # Get only the numerical values of the dataframe
+Y = data['sentiment'].values; # Put in Y the corresponding labels or sentiments
+
+print(X.shape) # Print the shape of the X part
+print(X) # Print some rows of X
 ```
 
-The former line defines a dictionary with two entries. Keys and values can be almost any type ([with a few restriction on keys](https://docs.python.org/3/tutorial/datastructures.html#dictionaries)), and in this case, we used strings. We can also use floats, integers, tuples, etc.
+## Load a pretrained Logistic Regression model
 
-### Adding or editing entries
-
-New entries can be inserted into dictionaries using square brackets. If the dictionary already contains the specified key, its value is overwritten.  
+In the same way, as part of this week's assignment, a Logistic regression model must be trained. The next cell contains the resulting model from such training. Notice that a list of 3 numeric values represents the whole model, that we have called _theta_ $\theta$.
 
 
 ```python
-# Add a new entry
-dictionary['key3'] = -5
-
-# Overwrite the value of key1
-dictionary['key1'] = 0
-
-print(dictionary)
+theta = [6.03518871e-08, 5.38184972e-04, -5.58300168e-04]
 ```
 
-### Accessing values and lookup keys
+## Plot the samples in a scatter plot
 
-Performing dictionary lookups and retrieval are common tasks in NLP. There are two ways to do this: 
+The vector theta represents a plane that split our feature space into two parts. Samples located over that plane are considered positive, and samples located under that plane are considered negative. Remember that we have a 3D feature space, i.e., each tweet is represented as a vector comprised of three values: `[bias, positive_sum, negative_sum]`, always having `bias = 1`. 
 
-* Using square bracket notation: This form is allowed if the lookup key is in the dictionary. It produces an error otherwise.
-* Using the [get()](https://docs.python.org/3/library/stdtypes.html#dict.get) method: This allows us to set a default value if the dictionary key does not exist. 
-
-Let us see these in action:
+If we ignore the bias term, we can plot each tweet in a cartesian plane, using `positive_sum` and `negative_sum`. In the cell below, we do precisely this. Additionally, we color each tweet, depending on its class. Positive tweets will be green and negative tweets will be red.
 
 
 ```python
-# Square bracket lookup when the key exist
-print(dictionary['key2'])
-```
-
-However, if the key is missing, the operation produce an error
-
-
-```python
-# The output of this line is intended to produce a KeyError
-print(dictionary['key8'])
-```
-
-When using a square bracket lookup, it is common to use an if-else block to check for containment first (with the keyword `in`) before getting the item. On the other hand, you can use the `.get()` method if you want to set a default value when the key is not found. Let's compare these in the cells below:
-
-
-```python
-# This prints a value
-if 'key1' in dictionary:
-    print("item found: ", dictionary['key1'])
-else:
-    print('key1 is not defined')
-
-# Same as what you get with get
-print("item found: ", dictionary.get('key1', -1))
-```
-
-
-```python
-# This prints a message because the key is not found
-if 'key7' in dictionary:
-    print(dictionary['key7'])
-else:
-    print('key does not exist!')
-
-# This prints -1 because the key is not found and we set the default to -1
-print(dictionary.get('key7', -1))
-```
-
-## Word frequency dictionary
-
-Now that we know the building blocks, let's finally take a look at the **build_freqs()** function in **utils.py**. This is the function that creates the dictionary containing the word counts from each corpus.
-
-```python
-def build_freqs(tweets, ys):
-    """Build frequencies.
-    Input:
-        tweets: a list of tweets
-        ys: an m x 1 array with the sentiment label of each tweet
-            (either 0 or 1)
-    Output:
-        freqs: a dictionary mapping each (word, sentiment) pair to its
-        frequency
-    """
-    # Convert np array to list since zip needs an iterable.
-    # The squeeze is necessary or the list ends up with one element.
-    # Also note that this is just a NOP if ys is already a list.
-    yslist = np.squeeze(ys).tolist()
-
-    # Start with an empty dictionary and populate it by looping over all tweets
-    # and over all processed words in each tweet.
-    freqs = {}
-    for y, tweet in zip(yslist, tweets):
-        for word in process_tweet(tweet):
-            pair = (word, y)
-            if pair in freqs:
-                freqs[pair] += 1
-            else:
-                freqs[pair] = 1    
-    return freqs
-```
-
-You can also do the for loop like this to make it a bit more compact:
-
-```python
-    for y, tweet in zip(yslist, tweets):
-        for word in process_tweet(tweet):
-            pair = (word, y)
-            freqs[pair] = freqs.get(pair, 0) + 1
-```
-
-As shown above, each key is a 2-element tuple containing a `(word, y)` pair. The `word` is an element in a processed tweet while `y` is an integer representing the corpus: `1` for the positive tweets and `0` for the negative tweets. The value associated with this key is the number of times that word appears in the specified corpus. For example: 
-
-``` 
-# "followfriday" appears 25 times in the positive tweets
-('followfriday', 1.0): 25
-
-# "shame" appears 19 times in the negative tweets
-('shame', 0.0): 19 
-```
-
-Now, it is time to use the dictionary returned by the `build_freqs()` function. First, let us feed our `tweets` and `labels` lists then print a basic report:
-
-
-```python
-# create frequency dictionary
-freqs = build_freqs(tweets, labels)
-
-# check data type
-print(f'type(freqs) = {type(freqs)}')
-
-# check length of the dictionary
-print(f'len(freqs) = {len(freqs)}')
-```
-
-Now print the frequency of each word depending on its class.
-
-
-```python
-print(freqs)
-```
-
-Unfortunately, this does not help much to understand the data. It would be better to visualize this output to gain better insights.
-
-## Table of word counts
-
-We will select a set of words that we would like to visualize. It is better to store this temporary information in a table that is very easy to use later.
-
-
-```python
-# select some words to appear in the report. we will assume that each word is unique (i.e. no duplicates)
-keys = ['happi', 'merri', 'nice', 'good', 'bad', 'sad', 'mad', 'best', 'pretti',
-        '❤', ':)', ':(', '😒', '😬', '😄', '😍', '♛',
-        'song', 'idea', 'power', 'play', 'magnific']
-
-# list representing our table of word counts.
-# each element consist of a sublist with this pattern: [<word>, <positive_count>, <negative_count>]
-data = []
-
-# loop through our selected words
-for word in keys:
-    
-    # initialize positive and negative counts
-    pos = 0
-    neg = 0
-    
-    # retrieve number of positive counts
-    if (word, 1) in freqs:
-        pos = freqs[(word, 1)]
-        
-    # retrieve number of negative counts
-    if (word, 0) in freqs:
-        neg = freqs[(word, 0)]
-        
-    # append the word counts to the table
-    data.append([word, pos, neg])
-    
-data
-```
-
-We can then use a scatter plot to inspect this table visually. Instead of plotting the raw counts, we will plot it in the logarithmic scale to take into account the wide discrepancies between the raw counts (e.g. `:)` has 3691 counts in the positive while only 2 in the negative). The red line marks the boundary between positive and negative areas. Words close to the red line can be classified as neutral. 
-
-
-```python
+# Plot the samples using columns 1 and 2 of the matrix
 fig, ax = plt.subplots(figsize = (8, 8))
 
-# convert positive raw counts to logarithmic scale. we add 1 to avoid log(0)
-x = np.log([x[1] + 1 for x in data])  
+colors = ['red', 'green']
 
-# do the same for the negative counts
-y = np.log([x[2] + 1 for x in data]) 
+# Color based on the sentiment Y
+ax.scatter(X[:,1], X[:,2], c=[colors[int(k)] for k in Y], s = 0.1)  # Plot a dot for each pair of words
+plt.xlabel("Positive")
+plt.ylabel("Negative")
+```
 
-# Plot a dot for each pair of words
-ax.scatter(x, y)  
+From the plot, it is evident that the features that we have chosen to represent tweets as numerical vectors allow an almost perfect separation between positive and negative tweets. So you can expect a very high accuracy for this model! 
 
-# assign axis labels
-plt.xlabel("Log Positive count")
-plt.ylabel("Log Negative count")
+## Plot the model alongside the data
 
-# Add the word as the label at the same position as you added the points just before
-for i in range(0, len(data)):
-    ax.annotate(data[i][0], (x[i], y[i]), fontsize=12)
+We will draw a gray line to show the cutoff between the positive and negative regions. In other words, the gray line marks the line where $$ z = \theta * x = 0.$$
+To draw this line, we have to solve the above equation in terms of one of the independent variables.
 
-ax.plot([0, 9], [0, 9], color = 'red') # Plot the red line that divides the 2 areas.
+$$ z = \theta * x = 0$$
+$$ x = [1, pos, neg] $$
+$$ z(\theta, x) = \theta_0+ \theta_1 * pos + \theta_2 * neg = 0 $$
+$$ neg = (-\theta_0 - \theta_1 * pos) / \theta_2 $$
+
+The red and green lines that point in the direction of the corresponding sentiment are calculated using a perpendicular line to the separation line calculated in the previous equations (neg function). It must point in the same direction as the derivative of the Logit function, but the magnitude may differ. It is only for a visual representation of the model. 
+
+$$direction = pos * \theta_2 / \theta_1$$
+
+
+```python
+# Equation for the separation plane
+# It give a value in the negative axe as a function of a positive value
+# f(pos, neg, W) = w0 + w1 * pos + w2 * neg = 0
+# s(pos, W) = (-w0 - w1 * pos) / w2
+def neg(theta, pos):
+    return (-theta[0] - pos * theta[1]) / theta[2]
+
+# Equation for the direction of the sentiments change
+# We don't care about the magnitude of the change. We are only interested 
+# in the direction. So this direction is just a perpendicular function to the 
+# separation plane
+# df(pos, W) = pos * w2 / w1
+def direction(theta, pos):
+    return    pos * theta[2] / theta[1]
+```
+
+The green line in the chart points in the direction where z > 0 and the red line points in the direction where z < 0. The direction of these lines are given by the weights $\theta_1$ and $\theta_2$
+
+
+```python
+# Plot the samples using columns 1 and 2 of the matrix
+fig, ax = plt.subplots(figsize = (8, 8))
+
+colors = ['red', 'green']
+
+# Color base on the sentiment Y
+ax.scatter(X[:,1], X[:,2], c=[colors[int(k)] for k in Y], s = 0.1)  # Plot a dot for each pair of words
+plt.xlabel("Positive")
+plt.ylabel("Negative")
+
+# Now lets represent the logistic regression model in this chart. 
+maxpos = np.max(X[:,1])
+
+offset = 5000 # The pos value for the direction vectors origin
+
+# Plot a gray line that divides the 2 areas.
+ax.plot([0,  maxpos], [neg(theta, 0),   neg(theta, maxpos)], color = 'gray') 
+
+# Plot a green line pointing to the positive direction
+ax.arrow(offset, neg(theta, offset), offset, direction(theta, offset), head_width=500, head_length=500, fc='g', ec='g')
+# Plot a red line pointing to the negative direction
+ax.arrow(offset, neg(theta, offset), -offset, -direction(theta, offset), head_width=500, head_length=500, fc='r', ec='r')
+
 plt.show()
 ```
 
-This chart is straightforward to interpret. It shows that emoticons `:)` and `:(` are very important for sentiment analysis. Thus, we should not let preprocessing steps get rid of these symbols!
+**Note that more critical than the Logistic regression itself, are the features extracted from tweets that allow getting the right results in this exercise.**
 
-Furthermore, what is the meaning of the crown symbol? It seems to be very negative!
-
-### That's all for this lab! We've seen how to build a word frequency dictionary and this will come in handy when extracting the features of a list of tweets. Next up, we will be reviewing Logistic Regression. Keep it up!
+That is all, folks. Hopefully, now you understand better what the Logistic regression model represents, and why it works that well for this specific problem. 
