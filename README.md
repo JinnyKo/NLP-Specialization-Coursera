@@ -6,6 +6,7 @@ Specialization - 4 course series
     - Week 2:
     - Week 3:
     - Week 4: 
+
 ## Course 2.Natural Language Processing with Probabilistic Models
    - Week 1: Autocorrect, minimum edit distance, and dynamic programming, then build your own spellchecker to correct misspelled words.
    - Week 2: Markov chains and Hidden Markov models, then use them to create part-of-speech tags for a Wall Street Journal text corpus.
