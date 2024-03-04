@@ -21,3 +21,5 @@
 - Filter candidates: (keep only the real words from the previous steps)
 - Calculate word probabilities: (choose the word that is most likely to occur in that context)
 
+## Dynamic Programming 
+
