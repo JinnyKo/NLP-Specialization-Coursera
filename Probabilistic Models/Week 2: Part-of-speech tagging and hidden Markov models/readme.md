@@ -132,6 +132,11 @@ for i in sequence:
 ## Emission Matrix
 ![image](https://github.com/JinnyKo/NLP-Specialization-Coursera/assets/93627969/40f0bee6-be70-4c24-b8b3-06d1f87bcaab)
 
+>계산된 전이 및 방출 확률은 HMM의 파라미터로 사용되며, 모델이 새로운 데이터에 대한 품사 태깅, 시퀀스 라벨링, 또는 다른 종류의 예측을 수행하는 데 사용된다.
+>(둘이 서로 계산 되는건 아님)
+> HMM의 학습 과정은 주로 기대치 최대화(Expectation-Maximization, EM) 알고리즘 중 하나인 Baum-Welch 알고리즘을 사용하여 수행되는데
+> 이는 관찰되지 않은 데이터(숨겨진 상태)에 대한 추정치를 반복적으로 개선한다. 
+
 
 
 
