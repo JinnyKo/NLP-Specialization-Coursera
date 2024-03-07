@@ -1,5 +1,5 @@
 # NLP-Specialization-by-Coursera
-Specialization - 4 course series 
+Specialization - 4 course series를 통해 공부한 내용과, 실습 및 과제를 하며 이슈가 있었던 부분들을 정리해 놓았습니다. 
 
 ## Course 1.Natural Language Processing with Classification and Vector Spaces
     - Week 1:
