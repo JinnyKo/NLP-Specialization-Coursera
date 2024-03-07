@@ -74,7 +74,7 @@ HMM은 주로 두 가지 기본 요소인 전이 행렬(Transition Matrix)과 �
 
 ### 예를들어 
 HMM에서는 "I"가 명사(Noun)인 상황에서 다음 단어 "love"가 동사(Verb)로 사용될 확률을 전이 행렬을 통해,
-그리고 "love"가 Verb일 때 실제로 'love'라는 단어가 관찰될 확률을 방출 행렬을 통해 계산합니다.
+그리고 "love"가 Verb일 때 실제로 'love'라는 단어가 관찰될 확률을 방출 행렬을 통해 계산한다. 
 
 ```
 from hmmlearn import hmm
@@ -116,9 +116,25 @@ logprob, sequence = model.decode(observed_sequence, algorithm="viterbi")
 print("Predicted states:")
 for i in sequence:
     print(states[i])
-M은 단순한 마르코프 체인보다 더 복잡한 데이터 구조를 모델링할 수 있음.
-
 ```
+## Transition Matrix
+![image](https://github.com/JinnyKo/NLP-Specialization-Coursera/assets/93627969/1735f6c0-8e02-4caa-b10f-b185aabc7cbb)
+
+### 때때로 두 개의 POS 태그가 서로 앞에 표시되지 않는 경우 => Smoothing 
+예를 들어, 전이 확률 행렬에서 특정 품사 A에서 품사 B로의 전이가 학습 데이터에 전혀 나타나지 않았다면, 해당 확률은 0으로 설정된다. 
+그러나 스무딩을 적용하면 이 확률에 아주 작은 값을 부여하여 완전히 0이 되지 않도록 조정할 수 있다. 이렇게 하면 학습 데이터에는 나타나지 않았지만 실제 사용 상황에서 발생할 수 있는 전이를 모델이 완전히 무시하지 않게 된다. (데이터 하나하나 소중...) 
+
+엡실론(ϵ)은 스무딩에서 사용하는 매우 작은 양수 값이 값은 . 특정한 고정값을 가지기보다는 문맥에 따라 그 크기가 조정될 수 있다. 
+스무딩에서 엡실론 값은 보통 실험적으로 결정되며, 모델의 성능에 미치는 영향을 고려하여 최적화된다. 
+일반적으로는 매우 작은 값(예: 0.01, 0.001, 1e-5 등)을 사용하여, 학습 데이터에 없는 시퀀스에 대해 0이 아닌 매우 작은 확률을 부여하고, 
+동시에 학습 데이터에 있는 시퀀스의 확률 분포를 크게 왜곡하지 않도록 한다. 
+
+## Emission Matrix
+![image](https://github.com/JinnyKo/NLP-Specialization-Coursera/assets/93627969/40f0bee6-be70-4c24-b8b3-06d1f87bcaab)
+
+
+
+
 
 
 
