@@ -3,19 +3,15 @@ Specialization를 통해 공부한 내용과, 실습 및 과제를 하며 이슈
 
 ## Natural Language Processing with Probabilistic Models
   - **Week 1**:
-    
-  Autocorrect, minimum edit distance, and dynamic programming, then build your own spellchecker to correct misspelled words.
+    Autocorrect, minimum edit distance, and dynamic programming, then build your own spellchecker to correct misspelled words.
   
   - **Week 2**:
-    
-  Markov chains and Hidden Markov models, then use them to create part-of-speech tags for a Wall Street Journal text corpus.
+    Markov chains and Hidden Markov models, then use them to create part-of-speech tags for a Wall Street Journal text corpus.
   
  - **Week 3**:
-   
-  How N-gram language models work by calculating sequence probabilities, then build your own autocomplete language model using a text corpus from Twitter.
+   How N-gram language models work by calculating sequence probabilities, then build your own autocomplete language model using a text corpus from Twitter.
   
  - **Week 4**:
-   
-  How word embeddings carry the semantic meaning of words, which makes them much more powerful for NLP tasks, then build your own Continuous bag-of-words model to create word embeddings from Shakespeare text.
+   How word embeddings carry the semantic meaning of words, which makes them much more powerful for NLP tasks, then build your own Continuous bag-of-words model to create word embeddings from Shakespeare text.
 
 
