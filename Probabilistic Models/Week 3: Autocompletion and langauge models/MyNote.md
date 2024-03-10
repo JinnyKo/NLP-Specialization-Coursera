@@ -1,3 +1,5 @@
+![image](https://github.com/JinnyKo/NLP-Specialization-Coursera/assets/93627969/d1e0db71-f214-443d-aaef-1a0750bdd090)
+
 # N-gram vs HMM 
 전 주에서 공부한 HMM과 직접적인 비교를 통해 N-gram의 개념에 대한 이해를 해보고자 한다. 
 일단, HMM의 최종적인 목표는(지난 주 과제를 기준으로) 
