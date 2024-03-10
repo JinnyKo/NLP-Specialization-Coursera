@@ -17,7 +17,7 @@
 > **N개의 연속적인 항목이란**, 텍스트 내에서 연속적으로 나타나는 N개의 단어(또는 문자)를 의미한다. 이 개념은 단순히 전체 문서에서 임의로 선택된 N개의 단어가 아니라, 실제로 텍스트 내에서 인접해 있는 N개의 단어 시퀀스를 가리킨다.
 
 > 예를 들어, "The quick brown fox jumps over the lazy dog"이라는 문장이 있다고 할 때:
-- 2-gram(바이그램)의 경우, 연속적인 항목의 예는 "the quick", "quick brown", "brown fox", "fox jumps" 등이 됩니다. 각각은 문장 내에서 바로 옆에 있는 단어들로 구성된다. 
+- 2-gram(바이그램)의 경우, 연속적인 항목의 예는 "the quick", "quick brown", "brown fox", "fox jumps". 각각은 문장 내에서 바로 옆에 있는 단어들로 구성된다. 
 - 3-gram(트라이그램)에서는 "the quick brown", "quick brown fox", "brown fox jumps" 이런식으로..
   
 > N-gram 모델에서는 이러한 N개의 연속적인 단어를 기반으로 하여 N+1번째 단어의 등장 확률을 예측하는것. 예를 들어, 바이그램 모델에서 "quick brown" 다음에 어떤 단어가 올 확률을 계산한다면, 이전에 나타난 "quick brown"이라는 바이그램에 기반하여 다음에 올 수 있는 단어의 확률 분포를 추정하는 것이다. 
