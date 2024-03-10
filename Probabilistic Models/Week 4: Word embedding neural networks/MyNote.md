@@ -22,10 +22,20 @@ ex) 예를 들어, "사과"라는 단어를 100차원의 벡터로 표현할 수
 기계 학습에서 사용되는 한 종류의 학습 방법이다. 이 방법은 레이블이 없는 데이터로부터 특징을 학습하는 방식으로, 데이터의 내재된 구조를 이용하여 학습하는 것을 의미한다. 
 ### Embedding 생성하는 모델
 
-> #### Word2ve
+## Classical Methods
+> #### Word2ve 
 - CBOW: 주변 단어들을 사용하여 중심 단어를 예측.
 - Skip-gram: 중심 단어를 사용하여 주변 단어를 예측.
+#### Continuous bag-of-words (CBOW):
+the model learns to predict the center word given some context words.
+#### Continuous skip-gram / Skip-gram with negative sampling (SGNS): 
+the model learns to predict the words surrounding a given input word.
+#### Global Vectors (GloVe) (Stanford, 2014): 
+factorizes the logarithm of the corpus's word co-occurrence matrix,  similar to the count matrix you’ve used before.
+#### fastText (Facebook, 2016): 
+based on the skip-gram model and takes into account the structure of words by representing words as an n-gram of characters. It supports out-of-vocabulary (OOV) words.
 
+## Deep learning, contextual embeddings
 >#### BERT, Bidirectional Encoder Representations from Transformers:
 - 양방향 Transformer 인코더를 사용하여 단어나 문장을 임베딩하는 데 사용된다.
 - 사전 학습된 언어 모델로, 대규모 텍스트 데이터를 사용하여 사전 학습된다.
