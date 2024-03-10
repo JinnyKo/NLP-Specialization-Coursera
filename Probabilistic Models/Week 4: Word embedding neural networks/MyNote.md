@@ -46,6 +46,55 @@ based on the skip-gram model and takes into account the structure of words by re
 - ElMo는 주어진 문맥에서 단어의 의미를 파악하기 위해 단어의 다양한 의미를 포착하는 데 중점을 둔다.
 - ElMo는 다층의 양방향 LSTM을 사용하여 단어의 다양한 의미적 표현을 학습하며, 이를 통해 단어 임베딩을 생성한다.
 
+# Sliding Windows of words
+전테 텍스트 데이터에서 문맥(주변 단어, 중심 단어) 을 정의하기위해서 사용함. 
+1. 문장이나 문서를 특정 크기의 윈도우로 나눈다.
+2. 윈도우를 한 단계씩 이동하면서 중심 단어와 주변 단어를 결정한다.
+3. 중심 단어와 주변 단어를 사용하여 모델을 학습하거나 다른 작업을 수행한다.
+
+```
+def sliding_window(sentence, window_size=3):
+    words = sentence.split()  # 문장을 단어로 분할
+    
+    contexts = []
+    targets = []
+    
+    for i in range(len(words)):
+        center_word = words[i]
+        start = max(0, i - window_size // 2)  # 윈도우 시작 인덱스
+        end = min(len(words), i + window_size // 2 + 1)  # 윈도우 끝 인덱스
+        context = [words[j] for j in range(start, end) if j != i]  # 중심 단어를 제외한 주변 단어들
+        
+        if len(context) == window_size - 1:  # 윈도우 크기와 일치하는 주변 단어가 있는 경우
+            contexts.append(context)
+            targets.append(center_word)
+    
+    return contexts, targets
+```
+
+> 다음은 교재의 예시 (yield 사용 하는 것 다시 보려고)  
+```
+def get_windows(words,C):
+    i=C
+    While i <len(words) - C:
+         center_word = words[i]
+         context_words = words[(i-C) :i] + words[(i+1) : (i+C+1)]
+         yield context_words, center_word
+         i += 1 
+```
+
+> ## 틀렸던 Quiz [답 이상하다고 생각]
+You are designing a neural network for a CBOW model that will be trained on a corpus with a vocabulary of 8000 words. If you want it to learn 400-dimensional word embedding vectors, what should be the sizes of the input, hidden, and output layers?
+> #### The answer is input 8000 hidden 400 output 8000. (답이 이거라는데..)
+CBOW 모델은 hidden layer 가 없는 것 아닌가....? **그래서 input 8000, output 8000** 이라고 생각함...임베딩의 차원이 400이 되도록 설정하는 것은 input payer,out layer와 별개의 것 아닌가? 
+
+### CBOW 모델 
+> CBOW 모델은 중심 단어(center word)를 기반으로 주변 단어(context words)를 예측하는 모델. 따라서 입력은 주변 단어들의 원-핫 인코딩 벡터이고, 출력은 중심 단어의 원-핫 인코딩 벡터이다. CBOW 모델에서는 입력과 출력 간에 은닉층(hidden layer)이 있지 않다.
+
+
+
+
+
 
 
 
