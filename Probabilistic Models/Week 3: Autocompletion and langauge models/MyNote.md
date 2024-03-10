@@ -63,7 +63,7 @@ NLP에서 퍼플렉서티(Perplexity)는 언어 모델의 성능을 평가하는
 
 ![image](https://github.com/JinnyKo/NLP-Specialization-Coursera/assets/93627969/427a3847-ea0a-4259-a0a6-09921c4e7d76)
 
-# Coupus에 없는 단어 다루기 => Open Vocabularies 
+# Coupus에 없는 단어 다루기(Out of vocabulary words (OOV)) => Open Vocabularies 
 #### Open Vocabularies: 
 means that you may encounter words from outside the vocabulary, like a name of a new city in the training set. Here is one recipe that would allow you to handle unknown words. 
 - Create vocabulary V
