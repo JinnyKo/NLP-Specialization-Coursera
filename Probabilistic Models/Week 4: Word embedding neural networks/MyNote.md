@@ -83,8 +83,8 @@ def get_windows(words,C):
          i += 1 
 ```
 
-> ## 틀렸던 Quiz [답 이상하다고 생각]
-You are designing a neural network for a CBOW model that will be trained on a corpus with a vocabulary of 8000 words. If you want it to learn 400-dimensional word embedding vectors, what should be the sizes of the input, hidden, and output layers?
+### 틀렸던 Quiz [답 이상하다고 생각]
+> Q: You are designing a neural network for a CBOW model that will be trained on a corpus with a vocabulary of 8000 words. If you want it to learn 400-dimensional word embedding vectors, what should be the sizes of the input, hidden, and output layers?
 > #### The answer is input 8000 hidden 400 output 8000. (답이 이거라는데..)
 CBOW 모델은 hidden layer 가 없는 것 아닌가....? **그래서 input 8000, output 8000** 이라고 생각함...임베딩의 차원이 400이 되도록 설정하는 것은 input payer,out layer와 별개의 것 아닌가? 
 
