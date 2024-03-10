@@ -15,6 +15,29 @@ ex) 예를 들어, 단어 "사과"를 표현할 때, 단어 집합의 크기가 
 => **저차원의 밀집된 벡터**
 ex) 예를 들어, "사과"라는 단어를 100차원의 벡터로 표현할 수 있다. 이 벡터는 각 차원이 해당 단어의 특정 의미적 특징을 나타낸다. [0.2,0.5,−0.1,...,0.3(n=100)]
 
+![image](https://github.com/JinnyKo/NLP-Specialization-Coursera/assets/93627969/24086256-d1fe-40ee-bcc0-484f3f296f26)
+
+# Embeddings (How to create word Embeddings) 
+**Self-supervised learning** 
+기계 학습에서 사용되는 한 종류의 학습 방법이다. 이 방법은 레이블이 없는 데이터로부터 특징을 학습하는 방식으로, 데이터의 내재된 구조를 이용하여 학습하는 것을 의미한다. 
+가장 많이 쓰는 방법은 Word2vec이고 주된 아키텍처로 CBOW, Skip-gram이 있다. 
+
+> #### Word2ve
+- CBOW: 주변 단어들을 사용하여 중심 단어를 예측.
+- Skip-gram: 중심 단어를 사용하여 주변 단어를 예측.
+
+>#### BERT, Bidirectional Encoder Representations from Transformers:
+- 양방향 Transformer 인코더를 사용하여 단어나 문장을 임베딩하는 데 사용된다.
+- 사전 학습된 언어 모델로, 대규모 텍스트 데이터를 사용하여 사전 학습된다.
+-  단어 임베딩을 생성할 뿐만 아니라, 문맥을 고려한 문장 임베딩을 생성할 수 있다.
+  
+> #### ElMo (Embeddings from Language Models):
+- ElMo는 양방향 LSTM (Long Short-Term Memory) 기반의 언어 모델을 사용하여 단어의 표현을 학습한다.
+- ElMo는 주어진 문맥에서 단어의 의미를 파악하기 위해 단어의 다양한 의미를 포착하는 데 중점을 둔다.
+- ElMo는 다층의 양방향 LSTM을 사용하여 단어의 다양한 의미적 표현을 학습하며, 이를 통해 단어 임베딩을 생성한다.
+
+
+
 
 
 
