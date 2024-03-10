@@ -20,7 +20,7 @@ ex) 예를 들어, "사과"라는 단어를 100차원의 벡터로 표현할 수
 # Embeddings (How to create word Embeddings) 
 **Self-supervised learning** 
 기계 학습에서 사용되는 한 종류의 학습 방법이다. 이 방법은 레이블이 없는 데이터로부터 특징을 학습하는 방식으로, 데이터의 내재된 구조를 이용하여 학습하는 것을 의미한다. 
-가장 많이 쓰는 방법은 Word2vec이고 주된 아키텍처로 CBOW, Skip-gram이 있다. 
+### Embedding 생성하는 모델
 
 > #### Word2ve
 - CBOW: 주변 단어들을 사용하여 중심 단어를 예측.
