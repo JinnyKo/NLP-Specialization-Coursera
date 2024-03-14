@@ -1,6 +1,5 @@
-# NLP-Specialization-by-Coursera
+# NLP-Specialization-by-Courser
 Specialization수업의 내용과 추가적으로 공부한 부분, 실습 및 과제를 하며 이슈가 있었던 부분 등을 주석 및 MyNote.md 첨부하여 정리해 놓았습니다. 
-
 ## Probabilistic Models
   - **Week 1**:
     Autocorrect, minimum edit distance, and dynamic programming, then build your own spellchecker to correct misspelled words.
